@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results for "{{ search_query }}"</title>
+</head>
+<body>
+    <h1>{{ video.title }}</h1>
+    
+    <!-- Video player -->
+    <video id="videoPlayer" controls>
+        <source src="{{ video.video_file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <!-- Language dropdown and search form -->
+    <form action="{% url 'video_detail' video.id %}" method="get">
+        <label for="language">Select Subtitle Language:</label>
+        <select id="language" name="language" onchange="this.form.submit()">
+            {% for lang in languages %}
+                <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ lang }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="q" placeholder="Search subtitles" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+    
+    <!-- Display search results -->
+    <h2>Subtitles</h2>
+    {% if subtitles %}
+        <ul>
+            {% for subtitle in subtitles %}
+            <li>
+                <a href="#" onclick="jumpToTimestamp('{{ subtitle.start_time }}'); return false;">
+                    <strong>{{ subtitle.start_time }}:</strong> {{ subtitle.text }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <script>
+        function jumpToTimestamp(timestamp) {
+            // Split the timestamp into hours, minutes, and seconds
+            var parts = timestamp.split(':');
+            
+            if (parts.length !== 3) {
+                console.error('Invalid timestamp format');
+                return;
+            }
+            
+            // Parse hours, minutes, and seconds
+            var hours = parseInt(parts[0], 10) || 0; // Default to 0 if parsing fails
+            var minutes = parseInt(parts[1], 10) || 0; // Default to 0 if parsing fails
+            var seconds = parseInt(parts[2], 10) || 0; // Default to 0 if parsing fails
+            
+            // Convert the total time to seconds
+            var totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+            
+            // Get the video element
+            var video = document.getElementById('videoPlayer');
+            
+            // Set the current time of the video to the total seconds calculated
+            video.currentTime = totalSeconds;
+            
+            // Optionally, play the video after jumping
+            video.play();
+        }
+    </script>
+    
+</body>
+</html>

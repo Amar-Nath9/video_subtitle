@@ -1,0 +1,31 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+
+# Ignore virtual environment
+venv/
+
+# Ignore media files
+media/
+
+# Ignore Django SQLite database files
+*.sqlite3
+
+# Ignore environment variables files
+.env
+
+# Ignore log files
+*.log
+
+# Ignore local settings files
+local_settings.py
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore specific files in subdirectories
+video_subtitle/subtitles/
