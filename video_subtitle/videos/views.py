@@ -30,7 +30,7 @@ def upload_video(request):
 
 def video_detail(request, video_id):
     video = get_object_or_404(Video, id=video_id)
-    selected_language = request.GET.get('language', 'en')
+    selected_language = request.GET.get('language', 'en')# check if eng 
     search_query = request.GET.get('q', '')
 
     subtitles = Subtitle.objects.filter(video=video, language=selected_language)
