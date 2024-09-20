@@ -87,6 +87,8 @@ The `video_subtitle` project is a Django application that allows users to upload
 
 ## Additional Requirements
 
+- **While checking the closed captions (CC), try toggling the CC off and on.**
+- **While running the server, if the subtitles are not visible, try changing the language and check again.**
 - Ensure you have PostgreSQL installed and running on your machine.
 - If using Docker, make sure your containers are properly configured and running.
 - Set up environment variables for sensitive information like database credentials if needed.
