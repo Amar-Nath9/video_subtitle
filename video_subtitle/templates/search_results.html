@@ -155,8 +155,12 @@
         <!-- Video player -->
         <video id="videoPlayer" controls>
             <source src="{{ video.video_file.url }}" type="video/mp4">
+            <track src="{{ MEDIA_URL }}subtitles/{{ video.title }}_{{ selected_language }}.vtt" kind="subtitles" srclang="{{ selected_language }}" label="{{ selected_language }}">
+
             Your browser does not support the video tag.
         </video>
+        
+        
                
         <!-- Buttons to upload file and go to list of videos -->
         <button onclick="location.href='{% url 'upload_video' %}'">Upload New Video</button>
@@ -178,13 +182,13 @@
         <button onclick="clearSearch()">Back to All Subtitles</button>
 
         <!-- Display search results -->
-        <h2>Subtitles</h2>
+        <h2>Subtitles To jump</h2>
         {% if subtitles %}
             <ul>
                 {% for subtitle in subtitles %}
                 <li>
                     <a href="#" onclick="jumpToTimestamp('{{ subtitle.start_time }}', event); return false;">
-                        <strong>{{ subtitle.start_time }}:</strong> {{ subtitle.text }}
+                        <strong>{{ subtitle.text }}</strong> 
                     </a>
                 </li>
                 {% endfor %}

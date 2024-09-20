@@ -2,6 +2,7 @@ import os
 import logging
 import ffmpeg
 import re
+from django.conf import settings
 from datetime import timedelta
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
@@ -51,6 +52,7 @@ def video_detail(request, video_id):
         'search_query': search_query,
         'message': message,
         'languages': languages,
+        'MEDIA_URL': settings.MEDIA_URL,
     }
 
     return render(request, 'search_results.html', context)
@@ -93,16 +95,17 @@ def extract_subtitles(video):
         # Extract subtitles for each subtitle stream
         for index, stream in enumerate(subtitle_streams):
             language = stream.get('tags', {}).get('language', f'lang_{index}')
-            output_path = os.path.join(output_dir, f"{video.title}_{language}.srt")
-
+            srt_output_path = os.path.join(output_dir, f"{video.title}_{language}.srt")
+            
             # Extract subtitles
             process = (
                 ffmpeg
                 .input(video_path)
-                .output(output_path, **{'c:s': 'copy', 'map': f'0:s:{index}'})
+                .output(srt_output_path, **{'c:s': 'copy', 'map': f'0:s:{index}'})
                 .run(capture_stdout=True, capture_stderr=True)
             )
-            save_subtitles_to_db(video, output_path, language)
+            save_subtitles_to_db(video, srt_output_path, language)
+            srt_to_vtt(srt_output_path)  # Convert SRT to VTT
         
         return None
 
@@ -110,6 +113,22 @@ def extract_subtitles(video):
         error_message = e.stderr.decode('utf8')
         logging.error(f"ffmpeg error: {error_message}")
         return f"ffmpeg error: {error_message}"
+
+
+def srt_to_vtt(srt_file_path):
+    vtt_file_path = srt_file_path.replace('.srt', '.vtt')
+    
+    with open(srt_file_path, 'r', encoding='utf-8') as srt_file, open(vtt_file_path, 'w', encoding='utf-8') as vtt_file:
+        vtt_file.write('WEBVTT\n\n')  # Write the WebVTT header
+        
+        for line in srt_file:
+            if '-->' in line:
+                line = line.replace(',', '.')
+            vtt_file.write(line)
+    
+    return vtt_file_path
+
+
 
 def save_subtitles_to_db(video, subtitle_path, language='en'):
     try:
