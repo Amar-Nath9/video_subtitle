@@ -22,7 +22,7 @@ The `video_subtitle` project is a Django application that allows users to upload
    <code>
    CREATE DATABASE your_database_name ENCODING 'UTF8';
    </code>
-   <button onclick="navigator.clipboard.writeText('CREATE DATABASE your_database_name ENCODING \'UTF8\';')">Copy</button>
+   <button onclick="navigator.clipboard.writeText('CREATE DATABASE your_database_name ENCODING \'UTF8\';')"></button>
    </pre>
 
 2. **Update Django Settings:**
@@ -42,7 +42,7 @@ The `video_subtitle` project is a Django application that allows users to upload
        }
    }
    </code>
-   <button onclick="navigator.clipboard.writeText('DATABASES = {\\n    \'default\': {\\n        \'ENGINE\': \'django.db.backends.postgresql\',\\n        \'NAME\': \'your_database_name\',\\n        \'USER\': \'your_user\',\\n        \'PASSWORD\': \'your_password\',\\n        \'HOST\': \'localhost\',\\n        \'PORT\': \'5432\',\\n    }\\n}')">Copy</button>
+   <button onclick="navigator.clipboard.writeText('DATABASES = {\\n    \'default\': {\\n        \'ENGINE\': \'django.db.backends.postgresql\',\\n        \'NAME\': \'your_database_name\',\\n        \'USER\': \'your_user\',\\n        \'PASSWORD\': \'your_password\',\\n        \'HOST\': \'localhost\',\\n        \'PORT\': \'5432\',\\n    }\\n}')"></button>
    </pre>
 
 ## Installing Requirements
@@ -55,7 +55,7 @@ The `video_subtitle` project is a Django application that allows users to upload
    <code>
    pip install -r requirements.txt
    </code>
-   <button onclick="navigator.clipboard.writeText('pip install -r requirements.txt')">Copy</button>
+   <button onclick="navigator.clipboard.writeText('pip install -r requirements.txt')"></button>
    </pre>
 
 ## Setting Up the Database
@@ -69,7 +69,7 @@ The `video_subtitle` project is a Django application that allows users to upload
    python manage.py makemigrations
    python manage.py migrate
    </code>
-   <button onclick="navigator.clipboard.writeText('python manage.py makemigrations\npython manage.py migrate')">Copy</button>
+   <button onclick="navigator.clipboard.writeText('python manage.py makemigrations\npython manage.py migrate')"></button>
    </pre>
 
 ## Running the Server
@@ -82,13 +82,14 @@ The `video_subtitle` project is a Django application that allows users to upload
    <code>
    python manage.py runserver
    </code>
-   <button onclick="navigator.clipboard.writeText('python manage.py runserver')">Copy</button>
+   <button onclick="navigator.clipboard.writeText('python manage.py runserver')"></button>
    </pre>
 
 ## Additional Requirements
 
 - **While checking the closed captions (CC), try toggling the CC off and on.**
 - **While running the server, if the subtitles are not visible, try changing the language and check again.**
+
 - Ensure you have PostgreSQL installed and running on your machine.
 - If using Docker, make sure your containers are properly configured and running.
 - Set up environment variables for sensitive information like database credentials if needed.
