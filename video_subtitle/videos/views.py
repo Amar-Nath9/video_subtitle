@@ -39,7 +39,7 @@ def video_detail(request, video_id):
         subtitles = subtitles.filter(text__icontains=search_query)
         message = f'Found "{search_query}" in the subtitles.'
     else:
-        message = 'No search query provided.'
+        message = 'No search query provided. Or select the Subtitle first'
 
     # Fetch available languages
     languages = Subtitle.objects.filter(video=video).values_list('language', flat=True).distinct()
@@ -61,27 +61,19 @@ def search_subtitles(request, video_id):
     query = request.GET.get('q', '')
     logging.debug(f"Search query: {query}")
 
-    if query:
-        subtitles = Subtitle.objects.filter(video=video, text__icontains=query)
-        logging.debug(f"Subtitles found: {subtitles}")
+    subtitles = Subtitle.objects.filter(video=video, text__icontains=query) if query else []
 
-        if subtitles.exists():
-            context = {
-                'video': video,
-                'subtitles': subtitles,
-                'search_query': query,
-                'message': f'Found "{query}" in the following subtitles:'
-            }
-        else:
-            context = {
-                'video': video,
-                'search_query': query,
-                'message': f'No match found for "{query}".'
-            }
-    else:
-        context = {'video': video}
-    
-    return render(request, 'video_play.html', context)
+    context = {
+        'video': video,
+        'subtitles': subtitles,
+        'search_query': query,
+        'message': f'Found "{query}" in the following subtitles:' if subtitles else f'No match found for "{query}".',
+        'languages': Subtitle.objects.filter(video=video).values_list('language', flat=True).distinct(),
+        'selected_language': 'en'  # Defaulting to 'en', but could be dynamic
+    }
+
+    return render(request, 'search_results.html', context)
+
 
 def extract_subtitles(video):
     video_path = video.video_file.path

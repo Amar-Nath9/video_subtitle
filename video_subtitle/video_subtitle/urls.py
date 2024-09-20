@@ -25,7 +25,8 @@ urlpatterns = [
   path('', views.list_videos, name='list_videos'),  # List all videos
     path('upload/', views.upload_video, name='upload_video'),  # Upload a new video
     path('video/<int:video_id>/', views.video_detail, name='video_detail'),  # Detailed view of a specific video
-    path('video/<int:video_id>/search/', views.search_subtitles, name='search_subtitles'),  # Search subtitles in a video
+    # path('video/<int:video_id>/search/', views.search_subtitles, name='search_subtitles'),  # Search subtitles in a video
+    
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

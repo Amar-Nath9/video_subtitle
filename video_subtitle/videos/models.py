@@ -12,8 +12,10 @@ class Video(models.Model):
 class Subtitle(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='subtitles')
     text = models.TextField()
-    start_time = models.DurationField() # HH:MM:SS,MS format
+    start_time = models.DurationField()  # HH:MM:SS,MS format
+    end_time = models.DurationField(null=True)  # Temporarily allow nulls
+   # Add end_time for subtitles
     language = models.CharField(max_length=10, default='en')
 
     def __str__(self):
-        return f'{self.start_time}: {self.text}'
+        return f'{self.start_time} --> {self.end_time}: {self.text}'

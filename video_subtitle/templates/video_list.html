@@ -2,16 +2,124 @@
 <html>
 <head>
     <title>Video List</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Header styling */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        /* Flexbox grid styling for video boxes */
+        .video-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .video-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            width: calc(33.333% - 40px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            text-align: center;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .video-box:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-box a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 18px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .video-box a:hover {
+            color: #0056b3;
+        }
+
+        /* Button styling */
+        .upload-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .upload-button:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .video-box {
+                width: calc(50% - 30px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .video-box {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .upload-button {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Uploaded Videos</h1>
-    <ul>
-        {% for video in videos %}
-        <li>
-            <a href="{% url 'video_detail' video.id %}">{{ video.title }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'upload_video' %}">Upload New Video</a>
+    <div class="container">
+        <h1>Uploaded Videos</h1>
+        <div class="video-grid">
+            {% for video in videos %}
+            <div class="video-box">
+                <a href="{% url 'video_detail' video.id %}">
+                    <strong>{{ video.title }}</strong>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'upload_video' %}" class="upload-button">Upload New Video</a>
+    </div>
 </body>
 </html>

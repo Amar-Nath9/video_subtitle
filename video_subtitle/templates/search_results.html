@@ -2,72 +2,221 @@
 <html>
 <head>
     <title>Search Results for "{{ search_query }}"</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        /* Header styling */
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        /* Video player styling */
+        video {
+            width: 100%;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Form styling */
+        form {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-weight: bold;
+            color: #34495e;
+            margin-right: 10px;
+        }
+
+        select, input[type="text"], button {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            margin: 5px;
+            flex: 1;
+        }
+
+        select {
+            max-width: 40%;
+        }
+
+        input[type="text"] {
+            flex: 2;
+            margin-left: 10px;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 16px;
+        }
+
+        button:hover {
+            background-color: #1b6591;
+        }
+
+        /* Subtitles section styling */
+        h2 {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background-color: #ecf0f1;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #2980b9;
+            font-size: 16px;
+        }
+
+        ul li a:hover {
+            color: #1b6591;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            video {
+                height: auto;
+            }
+
+            form {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            select, input[type="text"], button {
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+
+            ul li a {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ video.title }}</h1>
-    
-    <!-- Video player -->
-    <video id="videoPlayer" controls>
-        <source src="{{ video.video_file.url }}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    
-    <!-- Language dropdown and search form -->
-    <form action="{% url 'video_detail' video.id %}" method="get">
-        <label for="language">Select Subtitle Language:</label>
-        <select id="language" name="language" onchange="this.form.submit()">
-            {% for lang in languages %}
-                <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ lang }}</option>
-            {% endfor %}
-        </select>
-        <input type="text" name="q" placeholder="Search subtitles" value="{{ search_query }}">
-        <button type="submit">Search</button>
-    </form>
-    
-    <!-- Display search results -->
-    <h2>Subtitles</h2>
-    {% if subtitles %}
-        <ul>
-            {% for subtitle in subtitles %}
-            <li>
-                <a href="#" onclick="jumpToTimestamp('{{ subtitle.start_time }}'); return false;">
-                    <strong>{{ subtitle.start_time }}:</strong> {{ subtitle.text }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>{{ message }}</p>
-    {% endif %}
+    <div class="container">
+        <h1>{{ video.title }}</h1>
+        
+        <!-- Video player -->
+        <video id="videoPlayer" controls>
+            <source src="{{ video.video_file.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+               
+        <!-- Buttons to upload file and go to list of videos -->
+        <button onclick="location.href='{% url 'upload_video' %}'">Upload New Video</button>
+        <button onclick="location.href='{% url 'list_videos' %}'">Go to List of Videos</button>
+       
+        <!-- Language dropdown and search form -->
+        <form action="{% url 'video_detail' video.id %}" method="get">
+            <label for="language">Select Subtitle Language:</label>
+            <select id="language" name="language" onchange="this.form.submit()">
+                {% for lang in languages %}
+                    <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ lang }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="q" placeholder="Search subtitles" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+        
+        <!-- Back button -->
+        <button onclick="clearSearch()">Back to All Subtitles</button>
+
+        <!-- Display search results -->
+        <h2>Subtitles</h2>
+        {% if subtitles %}
+            <ul>
+                {% for subtitle in subtitles %}
+                <li>
+                    <a href="#" onclick="jumpToTimestamp('{{ subtitle.start_time }}', event); return false;">
+                        <strong>{{ subtitle.start_time }}:</strong> {{ subtitle.text }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
 
     <script>
-        function jumpToTimestamp(timestamp) {
-            // Split the timestamp into hours, minutes, and seconds
+        function jumpToTimestamp(timestamp, event) {
+            event.preventDefault(); // Prevent default link behavior
             var parts = timestamp.split(':');
-            
             if (parts.length !== 3) {
                 console.error('Invalid timestamp format');
                 return;
             }
-            
-            // Parse hours, minutes, and seconds
-            var hours = parseInt(parts[0], 10) || 0; // Default to 0 if parsing fails
-            var minutes = parseInt(parts[1], 10) || 0; // Default to 0 if parsing fails
-            var seconds = parseInt(parts[2], 10) || 0; // Default to 0 if parsing fails
-            
-            // Convert the total time to seconds
+            var hours = parseInt(parts[0], 10) || 0;
+            var minutes = parseInt(parts[1], 10) || 0;
+            var seconds = parseInt(parts[2], 10) || 0;
             var totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-            
-            // Get the video element
+        
             var video = document.getElementById('videoPlayer');
-            
-            // Set the current time of the video to the total seconds calculated
             video.currentTime = totalSeconds;
-            
-            // Optionally, play the video after jumping
             video.play();
         }
+
+        function clearSearch() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('q');  // Remove the search query parameter
+            window.location.href = url.toString();  // Redirect to the updated URL
+        }
     </script>
-    
 </body>
 </html>
