@@ -1,40 +1,92 @@
 # video_subtitle
 
+## Description
+
+The `video_subtitle` project is a Django application that allows users to upload videos and extract subtitles using FFmpeg. The application supports searching for phrases in videos and retrieving timestamps for those phrases.
+
+## Requirements
+
+- Python 3.x
+- Django
+- PostgreSQL
+- FFmpeg
+- Docker (optional)
+
 ## Setting Up the Database
 
 1. **Create a PostgreSQL Database with UTF8 Encoding:**
 
-   Before running the Django application, you need to create a PostgreSQL database with UTF8 encoding. Use the following SQL command to create a new database:
+   Before running the Django application, create a PostgreSQL database with UTF8 encoding using the following SQL command:
 
-   ```sql
+   <pre>
+   <code>
    CREATE DATABASE your_database_name ENCODING 'UTF8';
+   </code>
+   <button onclick="navigator.clipboard.writeText('CREATE DATABASE your_database_name ENCODING \'UTF8\';')">Copy</button>
+   </pre>
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_database_name',
-        'USER': 'your_user',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+2. **Update Django Settings:**
 
+   In your `settings.py` file, configure the database settings as follows:
 
-#### 2. **Provide a Setup Script:**
+   <pre>
+   <code>
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'your_database_name',
+           'USER': 'your_user',
+           'PASSWORD': 'your_password',
+           'HOST': 'localhost',
+           'PORT': '5432',
+       }
+   }
+   </code>
+   <button onclick="navigator.clipboard.writeText('DATABASES = {\\n    \'default\': {\\n        \'ENGINE\': \'django.db.backends.postgresql\',\\n        \'NAME\': \'your_database_name\',\\n        \'USER\': \'your_user\',\\n        \'PASSWORD\': \'your_password\',\\n        \'HOST\': \'localhost\',\\n        \'PORT\': \'5432\',\\n    }\\n}')">Copy</button>
+   </pre>
 
-Create a setup script that users can run to create a UTF8-encoded database. This script can be included in your project repository.
+## Installing Requirements
 
-**`setup_database.sh`**
-```bash
-#!/bin/bash
+3. **Install Dependencies:**
 
-# Variables
-DB_NAME="your_database_name"
-DB_USER="your_user"
-DB_PASSWORD="your_password"
+   Before running the application, install the required Python packages using the following command:
 
-# Create database with UTF8 encoding
-psql -U "$DB_USER" -c "CREATE DATABASE $DB_NAME ENCODING 'UTF8';"
+   <pre>
+   <code>
+   pip install -r requirements.txt
+   </code>
+   <button onclick="navigator.clipboard.writeText('pip install -r requirements.txt')">Copy</button>
+   </pre>
 
-echo "Database $DB_NAME created with UTF8 encoding."
+## Setting Up the Database
+
+4. **Run Migrations:**
+
+   After setting up the database, create the necessary database tables by running:
+
+   <pre>
+   <code>
+   python manage.py makemigrations
+   python manage.py migrate
+   </code>
+   <button onclick="navigator.clipboard.writeText('python manage.py makemigrations\npython manage.py migrate')">Copy</button>
+   </pre>
+
+## Running the Server
+
+5. **Start the Django Development Server:**
+
+   Once everything is set up, start the Django development server with:
+
+   <pre>
+   <code>
+   python manage.py runserver
+   </code>
+   <button onclick="navigator.clipboard.writeText('python manage.py runserver')">Copy</button>
+   </pre>
+
+## Additional Requirements
+
+- Ensure you have PostgreSQL installed and running on your machine.
+- If using Docker, make sure your containers are properly configured and running.
+- Set up environment variables for sensitive information like database credentials if needed.
