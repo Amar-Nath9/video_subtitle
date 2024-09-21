@@ -84,12 +84,67 @@ The `video_subtitle` project is a Django application that allows users to upload
    </code>
    <button onclick="navigator.clipboard.writeText('python manage.py runserver')"></button>
    </pre>
+## Running the Application With Docker
+
+If you prefer to use Docker, follow these steps:
+
+### 1. Docker Setup
+
+Ensure you have Docker and Docker Compose installed on your machine.
+
+### 2. Update Environment Variables
+
+Before running the Docker containers, update the `docker-compose.yml` file to reflect your database credentials:
+
+<pre>
+<code>
+services:
+  db:
+    environment:
+      POSTGRES_DB: your_database_name
+      POSTGRES_USER: your_user
+      POSTGRES_PASSWORD: your_password
+</code>
+<button onclick="navigator.clipboard.writeText('services:\\n  db:\\n    environment:\\n      POSTGRES_DB: your_database_name\\n      POSTGRES_USER: your_user\\n      POSTGRES_PASSWORD: your_password')"></button>
+</pre>
+
+### 3. Build and Run Docker Containers
+
+Use the following command to build and run the containers:
+
+<pre>
+<code>
+docker-compose up --build
+</code>
+<button onclick="navigator.clipboard.writeText('docker-compose up --build')"></button>
+</pre>
+
+### 4. Running Migrations in Docker
+
+After the containers are up, run migrations within the Docker container:
+
+<pre>
+<code>
+docker-compose exec web python manage.py migrate
+</code>
+<button onclick="navigator.clipboard.writeText('docker-compose exec web python manage.py migrate')"></button>
+</pre>
+
+### 5. Access the Application
+
+Once the containers are running, access the app via:
+
+<pre>
+<code>
+http://localhost:8000
+</code>
+<button onclick="navigator.clipboard.writeText('http://localhost:8000')"></button>
+</pre>
 
 ## Additional Requirements
 
 - **While checking the closed captions (CC), try toggling the CC off and on.**
 - **While running the server, if the subtitles are not visible, try changing the language and check again.**
-
-- Ensure you have PostgreSQL installed and running on your machine.
+- Ensure you have PostgreSQL installed and running on your machine if not using Docker.
 - If using Docker, make sure your containers are properly configured and running.
 - Set up environment variables for sensitive information like database credentials if needed.

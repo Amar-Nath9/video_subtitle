@@ -28,6 +28,5 @@ urlpatterns = [
     # path('video/<int:video_id>/search/', views.search_subtitles, name='search_subtitles'),  # Search subtitles in a video
     
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
