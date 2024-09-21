@@ -84,6 +84,7 @@ The `video_subtitle` project is a Django application that allows users to upload
    </code>
    <button onclick="navigator.clipboard.writeText('python manage.py runserver')"></button>
    </pre>
+   
 ## Running the Application With Docker
 
 If you prefer to use Docker, follow these steps:
